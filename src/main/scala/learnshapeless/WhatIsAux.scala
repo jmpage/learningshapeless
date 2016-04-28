@@ -27,7 +27,7 @@ object Ch06_WhatIsAux extends App {
   /** The type refinement is essential; if lost there's no going back.
     *
     * Uncomment this line and compile. Does the error make sense? */
-  //val eg_genericAux2: Generic.Aux[PersonDetails, String :: String :: HNil] = eg_generic
+//  val eg_genericAux3: Generic.Aux[PersonDetails, String :: String :: HNil] = eg_generic
 
 
 
@@ -39,7 +39,7 @@ object Ch06_WhatIsAux extends App {
 
 
   /** Apply `headGen` to `eg_people` */
-  def ex_head = ???
+  def ex_head = headGen(eg_people)
   println(s"ex_head: $ex_head")
 
 
@@ -48,12 +48,12 @@ object Ch06_WhatIsAux extends App {
   import GenericOrdering._
 
   /** Converts each element to generic form then returns the minimum according to the specified Ordering */
-  //def leastGen[T](ts: Seq[T])(implicit gen: Generic[T], o: Ordering[gen.Repr]): gen.Repr = ts.map(gen.to(_)).min
+  def leastGen[T, R](ts: Seq[T])(implicit gen: Generic.Aux[T, R], o: Ordering[R]): R = ts.map(gen.to(_)).min
 
   /** Exercise: Uncomment the above line. What happens? Can you use the info about Aux above to fix it?*/
 
   /** When you get `leastGen` to compile, apply it to `eg_people` */
-  def ex_least = ???
+  def ex_least = leastGen(eg_people)
   println(s"ex_least: $ex_least")
 
 }

@@ -69,8 +69,8 @@ object Ch08_Induction extends App {
     */
 
 //Uncomment these to test when your implementation is compiling/working
-//  assertEquals(123, MyTake.take(list, 1).head)
-//  assertEquals(123 :: "one two three" :: HNil, MyTake.take(list, 2))
+  assertEquals(123, MyTake.take(list, 1).head)
+  assertEquals(123 :: "one two three" :: HNil, MyTake.take(list, 2))
 
   illTyped("""list.take(4)""")
   illTyped("""list.take(-1)""")
@@ -83,11 +83,22 @@ object Ch08_Induction extends App {
 
     def take[L <: HList, N <: Nat](l: L, n: Nat)(implicit myTake: MyTake[L, n.N]): myTake.Out = myTake(l)
 
-    type Aux = Nothing
+    type Aux[L <: HList, N <: Nat, Out0 <: HList] = MyTake[L, N] { type Out = Out0 }
 
-    implicit def hlistMyTakeZero = ???
+    implicit def hlistMyTakeZero[L <: HList]: Aux[L, _0, HNil] =
+      new MyTake[L, _0] {
+        type Out = HNil
 
-    implicit def hlistMyTakeRecurse = ???
+        def apply(l: L): Out = HNil
+      }
+
+    implicit def hlistMyTakeRecurse[H, T <: HList, N <: Nat]
+      (implicit dt: MyTake[T, N]): Aux[H :: T, Succ[N], H :: dt.Out] =
+      new MyTake[H :: T, Succ[N]] {
+        type Out = H :: dt.Out
+
+        def apply(l: H :: T): Out = l.head :: dt(l.tail)
+      }
   }
 
 

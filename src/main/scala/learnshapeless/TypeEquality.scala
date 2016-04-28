@@ -29,7 +29,7 @@ object Ch11_TypeEquality extends App {
   def eg_IntStringNotEqual = illTyped("""implicitly[Int =:= String]""")
 
   /** Exercise: extend this method to accept a =:= implicit parameter so that call to it wont compile unless the param types are equal.*/
-  def ex_assertHaveEqualTypes[A, B](a: A, b: B): Unit = ???
+  def ex_assertHaveEqualTypes[A, B](a: A, b: B)(implicit ev: A =:= B): Unit = ()
 
   val eg_n1 = 5
   val eg_n2 = -42
@@ -37,8 +37,8 @@ object Ch11_TypeEquality extends App {
 
   /** Exercise: use the methods you created above on some test values.
     * Remeber you can use illTyped to wrap an expression that ought not to compile */
-  def ex_assert_n1n2_equal = ???
-  def ex_assert_n1n2_equal_wontCompile = ???
+  def ex_assert_n1n2_equal = ex_assertHaveEqualTypes(eg_n1, eg_n2)
+  def ex_assert_n1n2_equal_wontCompile = illTyped("""ex_assertHaveEqualTypes(eg_n1, eg_n3)""")
 
 
   /**  <:<  Conforms   */

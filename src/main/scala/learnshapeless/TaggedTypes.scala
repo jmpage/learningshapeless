@@ -32,18 +32,18 @@ object Ch02_TaggedTypes extends App {
   trait NameTag
   type Name = String @@ NameTag
   /** Tag the string "Katherine" as a Name*/
-  def ex_name: Name = ???
+  def ex_name: Name = tag2("Katherine").@@[NameTag]
 
   def eg_stillAString: String = ex_name
 
   /** Create 2 new type tags for Age and NumberChildren and tag2 `56` and `2` respectively */
   trait AgeTag
   type Age = Int @@ AgeTag
-  def ex_age: Age = ???
+  def ex_age: Age = tag2(56).@@[AgeTag]
 
   trait NumChildrenTag
   type NumChildren = Int @@ NumChildrenTag
-  def ex_numberChildren: NumChildren = ???
+  def ex_numberChildren: NumChildren = tag2(2).@@[NumChildrenTag]
 
   case class EgTypedPerson(id: Id, name: Name, age: Age, numChildren: NumChildren)
 
@@ -52,6 +52,6 @@ object Ch02_TaggedTypes extends App {
   def eg_ShouldntCompileWrongData = illTyped("""EgTypedPerson(ex_name, eg_id, ex_numberChildren, ex_age)""")
 
   /** Create a typed person instance correctly passing tagged values `eg_id`, `ex_name`, ` ex_age`, `ex_numberChildren` */
-  def ex_TypedPerson = ???
+  def ex_TypedPerson = EgTypedPerson(eg_id, ex_name, ex_age, ex_numberChildren)
 
 }
